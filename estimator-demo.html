@@ -466,6 +466,46 @@
       letter-spacing: 0.01em;
     }
 
+    /* Portfolio nav */
+    .portfolio-nav {
+      display: flex;
+      align-items: center;
+      padding: 0.45rem 2rem;
+      background: rgba(13,17,23,0.95);
+      border-bottom: 1px solid var(--border);
+    }
+    .portfolio-nav a {
+      font-family: var(--font);
+      font-size: 0.78rem;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .portfolio-nav a:hover { color: var(--text); }
+
+    /* Hint bar */
+    .hint-bar {
+      background: linear-gradient(90deg, rgba(88,166,255,0.06) 0%, rgba(88,166,255,0.1) 50%, rgba(88,166,255,0.06) 100%);
+      border: 1px solid rgba(88,166,255,0.15);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-align: center;
+      animation: hintGlow 3s ease-in-out infinite;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .hint-bar.hidden {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+    }
+    @keyframes hintGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(88,166,255,0.06); }
+      50% { box-shadow: 0 0 18px rgba(88,166,255,0.12); }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .app-body { padding: 1.25rem; }
@@ -481,6 +521,7 @@
 </head>
 <body>
 
+<div class="portfolio-nav"><a href="./index.html">&larr; Back to Portfolio</a></div>
 <div class="demo-banner">&#9889; Demo Mode &mdash; Powered by Claude Sonnet via Azure AI Foundry</div>
 
 <header class="app-header">
@@ -518,6 +559,8 @@
       <span class="pill">Fixed Price</span>
       <span class="pill">Mixed</span>
     </div>
+
+    <div class="hint-bar" id="hint-bar">&#128070; Click <strong>Open</strong> on any row to explore the interactive estimate detail view &mdash; including AI-assisted analysis</div>
 
     <div class="table-wrap">
       <table>
@@ -743,8 +786,10 @@
     }, 200);
   }
 
+  var hintBar = document.getElementById('hint-bar');
   document.querySelectorAll('.open-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
+      if (hintBar) hintBar.classList.add('hidden');
       showPage(pageDetail, pageList);
     });
   });
