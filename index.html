@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christopher Waltrip — Director of IT & Technical Lead</title>
+  <meta name="description" content="Christopher Waltrip — Director of IT at USDM Life Sciences. Salesforce developer, Azure architect, AI builder." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #09090f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.12);
+      --text: #e2e4ed;
+      --muted: #5c6070;
+      --muted2: #8890a4;
+      --accent: #5b8def;
+      --accent2: #9b7cf4;
+      --green: #3ecf8e;
+      --amber: #f5a623;
+      --font-head: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.65; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image: linear-gradient(rgba(91,141,239,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(91,141,239,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem; background: rgba(9,9,15,0.9); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted2); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.45rem 1rem; background: transparent; border: 1px solid var(--border2); border-radius: 6px; color: var(--text); text-decoration: none; transition: all 0.2s; }
+    .nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+    section { position: relative; z-index: 1; }
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 7rem 2.5rem 5rem; max-width: 1100px; margin: 0 auto; }
+    .hero-tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
+    .hero-tag::before { content: '// '; opacity: 0.5; }
+    .hero-name { font-family: var(--font-head); font-weight: 800; font-size: clamp(3rem, 7vw, 6rem); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s 0.35s forwards; }
+    .hero-name span { color: var(--accent); }
+    .hero-title { font-size: 1.15rem; color: var(--muted2); font-weight: 300; max-width: 600px; margin-bottom: 3rem; line-height: 1.7; opacity: 0; animation: fadeUp 0.6s 0.5s forwards; }
+    .hero-title strong { color: var(--text); font-weight: 500; }
+    .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s 0.65s forwards; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; text-decoration: none; transition: all 0.2s; letter-spacing: 0.02em; }
+    .btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+    .btn-primary:hover { background: #4a7de0; transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); opacity: 0; animation: fadeUp 0.6s 0.8s forwards; flex-wrap: wrap; }
+    .stat-num { font-family: var(--font-head); font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; }
+    .stat-num span { color: var(--accent); }
+    .stat-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.4rem; }
+    .section-wrap { max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .section-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .section-label::before { content: '// '; opacity: 0.5; }
+    .section-title { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.025em; margin-bottom: 1rem; line-height: 1.1; }
+    .section-sub { color: var(--muted2); max-width: 560px; margin-bottom: 3.5rem; font-weight: 300; }
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s; }
+    .project-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .project-card.featured { grid-column: span 2; background: linear-gradient(135deg, var(--surface) 0%, rgba(91,141,239,0.04) 100%); }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
+    .project-card:hover::before { opacity: 1; }
+    .project-status { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; padding: 0.25rem 0.6rem; border-radius: 100px; margin-bottom: 1.25rem; }
+    .status-live { background: rgba(62,207,142,0.1); color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+    .status-live::before { content: '●'; font-size: 0.5rem; animation: pulse 2s infinite; }
+    .project-title { font-family: var(--font-head); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+    .project-desc { color: var(--muted2); font-size: 0.9rem; line-height: 1.65; margin-bottom: 1.5rem; font-weight: 300; }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .tag { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 4px; background: var(--surface2); color: var(--muted2); border: 1px solid var(--border); }
+    .tag-blue { background: rgba(91,141,239,0.08); color: var(--accent); border-color: rgba(91,141,239,0.2); }
+    .tag-purple { background: rgba(155,124,244,0.08); color: var(--accent2); border-color: rgba(155,124,244,0.2); }
+    .tag-green { background: rgba(62,207,142,0.08); color: var(--green); border-color: rgba(62,207,142,0.2); }
+    .project-links { display: flex; gap: 0.75rem; }
+    .project-link { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted2); text-decoration: none; display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s; }
+    .project-link:hover { color: var(--accent); }
+    .project-link svg { width: 12px; height: 12px; }
+    .featured-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .featured-highlights { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .featured-highlights li { font-size: 0.875rem; color: var(--muted2); padding-left: 1rem; position: relative; }
+    .featured-highlights li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-family: var(--font-mono); }
+    #skills { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .skill-group-title { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+    .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-list li { font-size: 0.875rem; color: var(--muted2); padding-left: 1rem; position: relative; }
+    .skill-list li::before { content: '·'; position: absolute; left: 0; color: var(--muted); }
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item { display: grid; grid-template-columns: 200px 1fr; gap: 2.5rem; position: relative; padding-bottom: 3rem; }
+    .timeline-item::before { content: ''; position: absolute; left: 200px; top: 8px; bottom: 0; width: 1px; background: var(--border); transform: translateX(calc(-50% + 1.25rem)); }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-left { padding-top: 4px; }
+    .timeline-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.04em; line-height: 1.5; }
+    .timeline-company { font-family: var(--font-head); font-size: 0.85rem; font-weight: 700; color: var(--muted2); margin-top: 0.25rem; }
+    .timeline-right { position: relative; padding-left: 2.5rem; }
+    .timeline-right::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--border2); }
+    .timeline-role { font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.015em; }
+    .timeline-desc { color: var(--muted2); font-size: 0.875rem; line-height: 1.7; margin-bottom: 1rem; font-weight: 300; }
+    .timeline-achievements { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .timeline-achievements li { font-size: 0.85rem; color: var(--muted2); padding-left: 1.2rem; position: relative; line-height: 1.5; }
+    .timeline-achievements li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.7rem; top: 2px; }
+    .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .cert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; transition: border-color 0.2s; }
+    .cert-card:hover { border-color: var(--border2); }
+    .cert-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; background: rgba(91,141,239,0.1); }
+    .cert-name { font-size: 0.85rem; font-weight: 500; line-height: 1.3; }
+    .cert-year { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.2rem; }
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .edu-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .edu-school { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .edu-degree { font-size: 0.875rem; color: var(--muted2); margin-bottom: 0.2rem; }
+    .edu-year { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; }
+    #contact { background: var(--surface); border-top: 1px solid var(--border); }
+    .contact-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .contact-title { font-family: var(--font-head); font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1rem; }
+    .contact-sub { color: var(--muted2); font-weight: 300; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-link { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--muted2); text-decoration: none; transition: color 0.2s; }
+    .contact-link:hover { color: var(--accent); }
+    .contact-link-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+    footer p { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      #hero { padding: 6rem 1.25rem 4rem; }
+      .section-wrap { padding: 3.5rem 1.25rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: span 1; }
+      .featured-inner { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .timeline-item::before { display: none; }
+      .timeline-right { padding-left: 1.5rem; }
+      .certs-grid { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">CW<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/christopher-waltrip/" target="_blank" class="nav-cta">↗ LinkedIn</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-tag">Director of IT · Technical Lead · AI Builder</div>
+  <h1 class="hero-name">Christopher<br><span>Waltrip</span></h1>
+  <p class="hero-title">
+    <strong>15+ years</strong> leading technology at the intersection of Salesforce, Azure, and AI.
+    Building internal tools that automate real work — from AI-enabled estimating apps
+    to multi-agent development platforms.
+  </p>
+  <div class="hero-links">
+    <a href="#projects" class="btn btn-primary">View Projects →</a>
+    <a href="https://www.linkedin.com/in/christopher-waltrip/" target="_blank" class="btn btn-secondary">LinkedIn ↗</a>
+    <a href="mailto:christopherwaltrip@gmail.com" class="btn btn-secondary">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="stat-num">15<span>+</span></div><div class="stat-label">Years Experience</div></div>
+    <div><div class="stat-num">3<span>×</span></div><div class="stat-label">Salesforce Certified</div></div>
+    <div><div class="stat-num">10<span>+</span></div><div class="stat-label">Enterprise Systems</div></div>
+    <div><div class="stat-num">100<span>+</span></div><div class="stat-label">Clients Onboarded</div></div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-wrap">
+    <div class="section-label">Featured Work</div>
+    <h2 class="section-title fade-in">AI-Enabled Internal Apps</h2>
+    <p class="section-sub fade-in">Building a portfolio of intelligent internal tools on Azure + Salesforce.</p>
+    <div class="projects-grid">
+
+      <div class="project-card featured fade-in">
+        <div class="project-status status-live">Live in Production</div>
+        <div class="featured-inner">
+          <div>
+            <h3 class="project-title">Certinia Estimator App</h3>
+            <p class="project-desc">AI-powered professional services estimating tool that integrates with Salesforce Certinia PSA. Pulls real resource availability, suggests staffing via Claude AI, generates SOW narratives, and flags risks — all inside the estimate builder.</p>
+            <div class="project-stack">
+              <span class="tag tag-blue">React</span>
+              <span class="tag tag-blue">TypeScript</span>
+              <span class="tag tag-blue">Azure Functions</span>
+              <span class="tag tag-purple">Claude Sonnet</span>
+              <span class="tag tag-purple">GPT-4o</span>
+              <span class="tag tag-green">Salesforce</span>
+              <span class="tag tag-green">Certinia PSA</span>
+              <span class="tag">Azure AI Foundry</span>
+              <span class="tag">GitHub Actions</span>
+            </div>
+            <div class="project-links">
+              <a href="https://mango-coast-000259d0f.2.azurestaticapps.net" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Live App
+              </a>
+              <a href="https://github.com/usdmgit/sf_estimator_app" target="_blank" class="project-link">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <div>
+            <div style="margin-bottom:0.75rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Key Capabilities</div>
+            <ul class="featured-highlights">
+              <li>6-mode AI analysis: Suggest, Review, Narrative, Optimize, Risks, Rates</li>
+              <li>Model selector: Claude Sonnet (Anthropic) ↔ GPT-4o (Azure AI Foundry)</li>
+              <li>Live Salesforce resource availability via custom Apex REST API</li>
+              <li>Draft persistence in Azure Table Storage</li>
+              <li>Full PKCE OAuth flow through Azure Function proxy</li>
+              <li>GitHub Actions CI/CD → Azure Static Web Apps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-status status-live">Active</div>
+        <h3 class="project-title">Project Olympus</h3>
+        <p class="project-desc">Multi-agent AI development platform on Mac Mini M4. Hierarchical agent architecture with least-privilege access control — Hermes orchestrates, specialist agents execute.</p>
+        <div class="project-stack">
+          <span class="tag tag-purple">Claude Code</span>
+          <span class="tag">Mac Mini M4</span>
+          <span class="tag">MCP</span>
+          <span class="tag">Multi-Agent</span>
+          <span class="tag">Jira / Confluence</span>
+        </div>
+        <ul class="featured-highlights" style="margin-bottom:1.5rem;">
+          <li>Agents: Hermes, Hephaestus, Aether, Prometheus, Athena</li>
+          <li>Role-based SSH access — analyst to admin tiers</li>
+          <li>Every agent action logged to audit trail</li>
+        </ul>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-status status-live">Active</div>
+        <h3 class="project-title">Microsoft Fabric Data Pipeline</h3>
+        <p class="project-desc">PySpark medallion architecture migrating Salesforce data into a bronze/silver/gold lakehouse for Power BI reporting. Replaced legacy SQL Server pipelines.</p>
+        <div class="project-stack">
+          <span class="tag tag-blue">Microsoft Fabric</span>
+          <span class="tag">PySpark</span>
+          <span class="tag">Delta Lake</span>
+          <span class="tag tag-green">Salesforce</span>
+          <span class="tag">Power BI</span>
+        </div>
+        <ul class="featured-highlights" style="margin-bottom:1.5rem;">
+          <li>Bronze → Silver → Gold data transformation layers</li>
+          <li>Salesforce object enrichment: Opportunity, User, Contact joins</li>
+          <li>Column standardization and date normalization</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-label">Technical Skills</div>
+    <h2 class="section-title fade-in">Stack & Expertise</h2>
+    <div class="skills-grid fade-in">
+      <div>
+        <div class="skill-group-title">Salesforce</div>
+        <ul class="skill-list">
+          <li>Apex (REST APIs, Triggers)</li>
+          <li>Lightning Web Components</li>
+          <li>Certinia / FinancialForce PSA</li>
+          <li>SOQL / SOSL</li>
+          <li>Pardot / Marketing Cloud</li>
+          <li>Salesforce CLI</li>
+          <li>Partner Communities</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-title">Azure & Cloud</div>
+        <ul class="skill-list">
+          <li>Azure Functions (Node.js)</li>
+          <li>Azure Static Web Apps</li>
+          <li>Azure AI Foundry</li>
+          <li>Azure Table Storage</li>
+          <li>Microsoft Fabric</li>
+          <li>Power BI</li>
+          <li>GitHub Actions CI/CD</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-title">Development</div>
+        <ul class="skill-list">
+          <li>React + TypeScript</li>
+          <li>Node.js</li>
+          <li>PySpark</li>
+          <li>REST API Design</li>
+          <li>OAuth / PKCE Flows</li>
+          <li>Git / GitHub</li>
+          <li>VS Code / Claude Code</li>
+        </ul>
+      </div>
+      <div>
+        <div class="skill-group-title">AI & Strategy</div>
+        <ul class="skill-list">
+          <li>Anthropic Claude API</li>
+          <li>Azure OpenAI (GPT-4o)</li>
+          <li>Prompt Engineering</li>
+          <li>Multi-Agent Architecture</li>
+          <li>MCP Protocol</li>
+          <li>AI Product Strategy</li>
+          <li>IT Governance & Roadmap</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-wrap">
+    <div class="section-label">Career</div>
+    <h2 class="section-title fade-in">Professional Experience</h2>
+    <div class="timeline">
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-left">
+          <div class="timeline-date">Oct 2020 – Present</div>
+          <div class="timeline-company">USDM Life Sciences</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Director of Information Technology</div>
+          <p class="timeline-desc">Lead organizational change management across IT applications, infrastructure, and services. Oversee SaaS contracts, IT governance, cybersecurity, and enterprise systems. Drive the company's AI enablement strategy — building internal AI tools on Azure + Salesforce.</p>
+          <ul class="timeline-achievements">
+            <li>Built AI-enabled Certinia Estimator App with Claude/GPT-4o integration (Azure AI Foundry)</li>
+            <li>Established Microsoft-native AI architecture across Azure, Fabric, and Foundry</li>
+            <li>Developed multi-agent Project Olympus platform on Mac Mini M4</li>
+            <li>Manage IT roadmap, application health, and service delivery for leadership</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-left">
+          <div class="timeline-date">Oct 2016 – Oct 2020</div>
+          <div class="timeline-company">USDM Life Sciences</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Manager of IT, Digital Experience & Strategic Planning</div>
+          <p class="timeline-desc">Comprehensive management of IT infrastructures. Led platform implementations, managed a team of IT professionals, and defined business requirements for system enhancements.</p>
+          <ul class="timeline-achievements">
+            <li>Salesforce Partner Community implementation — onboarded 100+ clients</li>
+            <li>Implemented Salesforce Lightning, Einstein Sales Cloud, Pardot, Simpplr</li>
+            <li>Led Workboard OKR implementation — design, training, vendor management</li>
+            <li>DocuSign Part 11 Computer Systems Validation</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-left">
+          <div class="timeline-date">Jul 2015 – Oct 2016</div>
+          <div class="timeline-company">USDM Life Sciences</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">eLearning Developer</div>
+          <p class="timeline-desc">Managed Cornerstone for Salesforce LMS. Developed eLearning curriculum for all departments including Sales, Finance, HR, and Onboarding.</p>
+          <ul class="timeline-achievements">
+            <li>Migrated modules from Brainshark to Cornerstone for Salesforce</li>
+            <li>Developed learning paths for each department</li>
+            <li>Converted static training to video modules via Adobe Captivate</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-left">
+          <div class="timeline-date">Mar 2013 – Apr 2015</div>
+          <div class="timeline-company">MGM Grand / NY-NY</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">General Manager — Gallagher's Steakhouse</div>
+          <p class="timeline-desc">Oversaw daily operations of an 80-employee, $12M/year fine dining steakhouse. Drove sales, cost controls, staff training, and guest experience.</p>
+          <ul class="timeline-achievements">
+            <li>Ranked #1 across MGM Grand Core Properties in 2014</li>
+            <li>Boosted online reservations 50%, increasing peak hour seat utilization by 10%</li>
+            <li>TripAdvisor Award of Excellence 2013</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-left">
+          <div class="timeline-date">Jun 2009 – Feb 2013</div>
+          <div class="timeline-company">The Venetian, Las Vegas</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">General Manager — V Bar Ultra Lounge</div>
+          <p class="timeline-desc">Managed daily operations of a $4M/year venue. Generated sales and implemented marketing initiatives to establish new revenue streams.</p>
+          <ul class="timeline-achievements">
+            <li>Increased sales 20% through revamped banquet event packaging</li>
+            <li>V Bar voted "Best Escape" by Las Vegas Weekly 2010; Forbes Rating improved 2012</li>
+            <li>Reduced entertainment & marketing expenditures by 20%</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="section-wrap">
+    <div class="section-label">Qualifications</div>
+    <h2 class="section-title fade-in">Certifications</h2>
+    <div class="certs-grid fade-in">
+      <div class="cert-card"><div class="cert-icon">☁️</div><div><div class="cert-name">Salesforce Certified Developer</div><div class="cert-year">~ 2020</div></div></div>
+      <div class="cert-card"><div class="cert-icon">☁️</div><div><div class="cert-name">Salesforce Advanced Administrator</div><div class="cert-year">~ 2019</div></div></div>
+      <div class="cert-card"><div class="cert-icon">☁️</div><div><div class="cert-name">Salesforce Administrator</div><div class="cert-year">~ 2019</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🏆</div><div><div class="cert-name">Salesforce Trailhead Ranger</div><div class="cert-year">~ 2018</div></div></div>
+      <div class="cert-card"><div class="cert-icon">💼</div><div><div class="cert-name">FinancialForce PSA Administrator</div><div class="cert-year">~ 2018</div></div></div>
+      <div class="cert-card"><div class="cert-icon">🍷</div><div><div class="cert-name">International Sommelier's Guild L1 & L2</div><div class="cert-year">~ 2012</div></div></div>
+    </div>
+    <div style="margin-top:3.5rem;">
+      <div class="section-label">Education</div>
+      <div class="edu-grid fade-in">
+        <div class="edu-card">
+          <div class="edu-school">California State University, Chico</div>
+          <div class="edu-degree">B.A. International Relations & French</div>
+          <div class="edu-degree">CA Single Subject Teaching Credential — Foreign Language</div>
+          <div class="edu-degree">CLAD Certified</div>
+          <div class="edu-year">2003 – 2004 · Chico, CA</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-school">Université d'Aix-Marseille III</div>
+          <div class="edu-degree">Diploma — Language & Political Science</div>
+          <div class="edu-year">2002 · Aix-en-Provence, France</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="section-label">Get In Touch</div>
+      <h2 class="contact-title fade-in">Let's build something together.</h2>
+      <p class="contact-sub fade-in">Open to conversations about AI enablement, Salesforce architecture, Azure strategy, or technical leadership.</p>
+      <div class="contact-links fade-in">
+        <a href="mailto:christopherwaltrip@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉</div>christopherwaltrip@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/christopher-waltrip/" target="_blank" class="contact-link">
+          <div class="contact-link-icon" style="font-size:0.7rem;font-weight:700;">in</div>linkedin.com/in/christopher-waltrip
+        </a>
+        <a href="https://github.com/Chrismw2" target="_blank" class="contact-link">
+          <div class="contact-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+          github.com/Chrismw2
+        </a>
+        <a href="tel:7026738857" class="contact-link">
+          <div class="contact-link-icon">📞</div>702.673.8857
+        </a>
+      </div>
+    </div>
+    <div class="fade-in" style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:2rem;">
+      <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);margin-bottom:1.25rem;">📍 Las Vegas, NV</div>
+      <div style="font-family:var(--font-head);font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;">Currently at</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:500;margin-bottom:0.25rem;">USDM Life Sciences</div>
+      <div style="font-size:0.875rem;color:var(--muted2);margin-bottom:1.5rem;">Director of Information Technology<br>July 2015 – Present</div>
+      <div style="border-top:1px solid var(--border);padding-top:1.25rem;">
+        <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em;">Currently Building</div>
+        <div style="font-size:0.875rem;color:var(--muted2);line-height:1.6;">AI-enabled internal app portfolio on Azure + Salesforce. Azure AI Foundry integration. Multi-agent development platform.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Christopher Waltrip · Las Vegas, NV</p>
+  <p>Built with HTML · Hosted on GitHub Pages</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => { if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : ''; });
+  });
+</script>
+</body>
+</html>
