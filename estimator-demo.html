@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certinia Estimator — Demo</title>
+  <meta name="description" content="AI-powered professional services estimating tool built on React, Azure Functions, Claude Sonnet, and Certinia PSA." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2129;
+      --surface3: #21262d;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #e6edf3;
+      --text2: #c9d1d9;
+      --muted: #8b949e;
+      --muted2: #6e7681;
+      --accent: #58a6ff;
+      --accent-dim: rgba(88,166,255,0.1);
+      --accent-mid: rgba(88,166,255,0.18);
+      --green: #3fb950;
+      --green-dim: rgba(63,185,80,0.12);
+      --amber: #d29922;
+      --amber-dim: rgba(210,153,34,0.12);
+      --gray-badge: #484f58;
+      --gray-badge-dim: rgba(72,79,88,0.25);
+      --font: 'DM Sans', -apple-system, sans-serif;
+      --mono: 'DM Mono', 'SF Mono', monospace;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+    /* Demo banner */
+    .demo-banner {
+      background: linear-gradient(90deg, rgba(88,166,255,0.08) 0%, rgba(88,166,255,0.04) 50%, rgba(88,166,255,0.08) 100%);
+      border-bottom: 1px solid rgba(88,166,255,0.15);
+      padding: 0.5rem 1.5rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.03em;
+    }
+
+    /* Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .app-logo-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent) 0%, #3d8bfd 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(88,166,255,0.25);
+    }
+    .app-user {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .app-user-name {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .app-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3d8bfd 0%, var(--accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    /* Layout */
+    .app-body { max-width: 1200px; margin: 0 auto; padding: 2rem; min-height: calc(100vh - 140px); }
+
+    /* Page transitions */
+    .page { display: none; opacity: 0; transform: translateY(8px); }
+    .page.active { display: block; animation: pageIn 0.35s ease forwards; }
+    .page.fade-out { animation: pageOut 0.2s ease forwards; }
+    @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pageOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-4px); } }
+
+    /* Page 1 — List */
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+    .page-title { font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.15rem;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      position: relative;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(88,166,255,0.2);
+    }
+    .btn-primary:hover { background: #4c9aef; box-shadow: 0 2px 12px rgba(88,166,255,0.3); }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid rgba(88,166,255,0.3);
+    }
+    .btn-outline:hover { background: var(--accent-dim); border-color: var(--accent); }
+    .btn[disabled], .btn.demo-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn[disabled]:hover, .btn.demo-disabled:hover {
+      background: var(--accent);
+      box-shadow: 0 1px 4px rgba(88,166,255,0.2);
+    }
+
+    /* Tooltip */
+    .demo-tooltip {
+      position: relative;
+    }
+    .demo-tooltip::after {
+      content: 'Demo mode — disabled';
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: var(--surface3);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      white-space: nowrap;
+      border: 1px solid var(--border2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s, transform 0.15s;
+      z-index: 10;
+    }
+    .demo-tooltip:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* Search */
+    .search-bar {
+      width: 100%;
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 1.25rem;
+    }
+    .search-bar::placeholder { color: var(--muted2); }
+    .search-bar:focus { border-color: rgba(88,166,255,0.4); box-shadow: 0 0 0 3px rgba(88,166,255,0.08); }
+    .search-wrap { position: relative; }
+    .search-wrap::before {
+      content: '⌕';
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(calc(-50% - 0.625rem));
+      color: var(--muted2);
+      font-size: 0.95rem;
+    }
+
+    /* Filter pills */
+    .filter-row { display: flex; gap: 0.5rem; margin-bottom: 0.65rem; flex-wrap: wrap; }
+    .filter-row + .filter-row { margin-bottom: 1.5rem; }
+    .pill {
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font);
+    }
+    .pill:hover { border-color: var(--border2); color: var(--text2); }
+    .pill.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+
+    /* Table */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(88,166,255,0.03); }
+    tbody td {
+      padding: 0.7rem 1rem;
+      font-size: 0.84rem;
+      color: var(--text2);
+      vertical-align: middle;
+    }
+    .col-name { font-weight: 600; color: var(--text); font-family: var(--mono); font-size: 0.78rem; }
+    .col-opp { color: var(--muted); font-size: 0.8rem; }
+    .col-value { font-family: var(--mono); font-weight: 500; color: var(--text); font-size: 0.82rem; }
+    .col-date { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+    .col-type {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: var(--surface3);
+      color: var(--muted);
+      display: inline-block;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .badge-draft { background: var(--gray-badge-dim); color: var(--muted); }
+    .badge-draft .badge-dot { background: var(--gray-badge); }
+    .badge-review { background: var(--amber-dim); color: var(--amber); }
+    .badge-review .badge-dot { background: var(--amber); }
+    .badge-approved { background: var(--green-dim); color: var(--green); }
+    .badge-approved .badge-dot { background: var(--green); }
+
+    /* Action buttons */
+    .action-btns { display: flex; gap: 0.4rem; }
+    .action-btn {
+      padding: 0.3rem 0.65rem;
+      border-radius: 5px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      font-family: var(--font);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .action-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .action-btn-sf { color: var(--muted2); }
+    .action-btn-sf:hover { color: var(--green); border-color: rgba(63,185,80,0.4); background: var(--green-dim); }
+
+    .table-footer {
+      padding: 0.65rem 1rem;
+      font-size: 0.75rem;
+      color: var(--muted2);
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+    }
+
+    /* Page 2 — Detail */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      padding: 0.3rem 0;
+      transition: color 0.15s;
+    }
+    .back-btn:hover { color: #79bbff; }
+    .detail-title { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+    .detail-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
+    .detail-sub .badge { vertical-align: middle; margin-left: 0.35rem; }
+
+    .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .card-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-field { display: flex; justify-content: space-between; padding: 0.45rem 0; border-bottom: 1px solid var(--border); }
+    .card-field:last-child { border-bottom: none; }
+    .card-label { font-size: 0.78rem; color: var(--muted); }
+    .card-val { font-size: 0.82rem; font-weight: 500; color: var(--text); }
+    .card-val.mono { font-family: var(--mono); }
+
+    /* AI Card */
+    .card-ai {
+      border-color: rgba(88,166,255,0.2);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(88,166,255,0.04) 100%);
+      box-shadow: 0 0 25px rgba(88,166,255,0.06), 0 0 60px rgba(88,166,255,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-ai::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    .ai-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+    .ai-model {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+    .ai-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px rgba(63,185,80,0.5);
+      animation: aiPulse 2s ease-in-out infinite;
+    }
+    @keyframes aiPulse { 0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(63,185,80,0.5); } 50% { opacity: 0.5; box-shadow: 0 0 2px rgba(63,185,80,0.2); } }
+    .ai-subtitle { font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; }
+    .ai-insight {
+      background: rgba(88,166,255,0.05);
+      border: 1px solid rgba(88,166,255,0.12);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      font-size: 0.84rem;
+      color: var(--text2);
+      line-height: 1.65;
+      margin-bottom: 1.15rem;
+    }
+    .ai-insight::before {
+      content: '"';
+      font-size: 1.6rem;
+      color: var(--accent);
+      font-family: Georgia, serif;
+      line-height: 0;
+      position: relative;
+      top: 6px;
+      margin-right: 2px;
+      opacity: 0.6;
+    }
+
+    /* Line items table */
+    .line-items-section { margin-top: 0; }
+    .line-items-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .row-ai { background: rgba(88,166,255,0.035); }
+    .row-ai:hover { background: rgba(88,166,255,0.07) !important; }
+    .source-manual { color: var(--muted2); font-size: 0.72rem; }
+    .source-ai { color: var(--accent); font-size: 0.72rem; }
+    .total-row td {
+      font-weight: 700 !important;
+      color: var(--text) !important;
+      border-top: 2px solid var(--border2) !important;
+      border-bottom: none !important;
+      padding-top: 0.85rem !important;
+    }
+    .note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.85rem;
+      padding-left: 0.25rem;
+    }
+
+    /* Footer */
+    .app-footer {
+      text-align: center;
+      padding: 2.5rem 2rem 2rem;
+      font-size: 0.72rem;
+      color: var(--muted2);
+      font-family: var(--mono);
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .app-body { padding: 1.25rem; }
+      .cards-row { grid-template-columns: 1fr; }
+      .app-header { padding: 0.75rem 1.25rem; }
+      .app-user-name { display: none; }
+      table { font-size: 0.78rem; }
+      thead th, tbody td { padding: 0.55rem 0.6rem; }
+      .filter-row { gap: 0.35rem; }
+      .col-opp { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="demo-banner">&#9889; Demo Mode &mdash; Powered by Claude Sonnet via Azure AI Foundry</div>
+
+<header class="app-header">
+  <div class="app-logo">
+    <div class="app-logo-icon">&#9889;</div>
+    Certinia Estimator
+  </div>
+  <div class="app-user">
+    <span class="app-user-name">Christopher Waltrip</span>
+    <div class="app-avatar">CW</div>
+  </div>
+</header>
+
+<!-- PAGE 1: Estimates List -->
+<div id="page-list" class="page active">
+  <div class="app-body">
+    <div class="page-header">
+      <h1 class="page-title">Estimates</h1>
+      <button class="btn btn-primary demo-disabled demo-tooltip" disabled>+ New Estimate</button>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" class="search-bar" placeholder="Search by opportunity or estimate name..." disabled />
+    </div>
+
+    <div class="filter-row">
+      <span class="pill active">All Statuses</span>
+      <span class="pill">Draft</span>
+      <span class="pill">Under Review</span>
+      <span class="pill">Approved</span>
+    </div>
+    <div class="filter-row">
+      <span class="pill active">All Types</span>
+      <span class="pill">Time &amp; Materials</span>
+      <span class="pill">Fixed Price</span>
+      <span class="pill">Mixed</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Estimate Name</th>
+            <th>Opportunity</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Total Value</th>
+            <th>Last Modified</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-name">Helix-Cloud-Assurance-Q2</td>
+            <td class="col-opp">Helix Biosciences &mdash; GxP Cloud Assurance</td>
+            <td><span class="col-type">Time &amp; Materials</span></td>
+            <td><span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></td>
+            <td class="col-value">$284,500</td>
+            <td class="col-date">3/13/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-name">Orion-Validation-Phase2</td>
+            <td class="col-opp">Orion Therapeutics &mdash; CSV Validation Services</td>
+            <td><span class="col-type">Fixed Price</span></td>
+            <td><span class="badge badge-review"><span class="badge-dot"></span>Under Review</span></td>
+            <td class="col-value">$412,000</td>
+            <td class="col-date">3/11/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-name">Apex-ServiceNow-ITSM</td>
+            <td class="col-opp">Apex Pharma &mdash; ServiceNow ITSM Implementation</td>
+            <td><span class="col-type">Mixed</span></td>
+            <td><span class="badge badge-approved"><span class="badge-dot"></span>Approved</span></td>
+            <td class="col-value">$198,750</td>
+            <td class="col-date">3/8/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-name">Luminary-Azure-AI-Qual</td>
+            <td class="col-opp">Luminary Gene Therapy &mdash; Azure AI Qualification</td>
+            <td><span class="col-type">Time &amp; Materials</span></td>
+            <td><span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></td>
+            <td class="col-value">$336,200</td>
+            <td class="col-date">3/6/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-name">Nexus-Change-Mgmt-2026</td>
+            <td class="col-opp">Nexus Clinical &mdash; Change Management Consulting</td>
+            <td><span class="col-type">Fixed Price</span></td>
+            <td><span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></td>
+            <td class="col-value">$155,000</td>
+            <td class="col-date">3/4/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-name">Meridian-Agile-ProcessX</td>
+            <td class="col-opp">Meridian BioSolutions &mdash; Agile Process Excellence</td>
+            <td><span class="col-type">Mixed</span></td>
+            <td><span class="badge badge-review"><span class="badge-dot"></span>Under Review</span></td>
+            <td class="col-value">$521,800</td>
+            <td class="col-date">2/28/2026</td>
+            <td>
+              <div class="action-btns">
+                <button class="action-btn open-btn">Open</button>
+                <button class="action-btn action-btn-sf demo-tooltip">SF &#8599;</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="table-footer">Showing 6 of 6 estimates</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: Estimate Detail -->
+<div id="page-detail" class="page">
+  <div class="app-body">
+    <button class="back-btn" id="back-btn">&larr; Back to Estimates</button>
+    <h1 class="detail-title">Helix-Cloud-Assurance-Q2</h1>
+    <p class="detail-sub">Helix Biosciences &mdash; GxP Cloud Assurance &nbsp;|&nbsp; Time &amp; Materials <span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></p>
+
+    <div class="cards-row">
+      <div class="card">
+        <div class="card-title">Estimate Summary</div>
+        <div class="card-field"><span class="card-label">Opportunity</span><span class="card-val">Helix Biosciences &mdash; GxP Cloud Assurance</span></div>
+        <div class="card-field"><span class="card-label">Owner</span><span class="card-val">Jordan Pierce</span></div>
+        <div class="card-field"><span class="card-label">Type</span><span class="card-val">Time &amp; Materials</span></div>
+        <div class="card-field"><span class="card-label">Currency</span><span class="card-val mono">USD</span></div>
+        <div class="card-field"><span class="card-label">Total Value</span><span class="card-val mono" style="color:var(--accent);font-size:0.9rem;">$284,500</span></div>
+        <div class="card-field"><span class="card-label">Status</span><span class="card-val"><span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></span></div>
+        <div class="card-field"><span class="card-label">Last Modified</span><span class="card-val mono">3/13/2026</span></div>
+      </div>
+
+      <div class="card card-ai">
+        <div class="card-title" style="margin-bottom:0.15rem;">&#129302; AI Assistant</div>
+        <div class="ai-header">
+          <div class="ai-model"><div class="ai-pulse"></div> Claude Sonnet &middot; Azure AI Foundry</div>
+        </div>
+        <div class="ai-subtitle">AI-Assisted Estimate Analysis</div>
+        <div class="ai-insight">Based on similar GxP Cloud Assurance engagements, this estimate is within the expected range ($240K&ndash;$320K). Consider adding a 10% contingency buffer for validation documentation. Recommended reviewer: Solutions Architect.</div>
+        <button class="btn btn-outline demo-disabled demo-tooltip" disabled>Regenerate Analysis</button>
+      </div>
+    </div>
+
+    <div class="line-items-section">
+      <div class="line-items-title">Line Items</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Hours</th>
+              <th>Bill Rate</th>
+              <th>Total</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:500;color:var(--text);">Senior Validation Engineer</td>
+              <td class="col-value">320 hrs</td>
+              <td class="col-value">$185/hr</td>
+              <td class="col-value">$59,200</td>
+              <td><span class="source-manual">Manual</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;color:var(--text);">Cloud Solutions Architect</td>
+              <td class="col-value">240 hrs</td>
+              <td class="col-value">$225/hr</td>
+              <td class="col-value">$54,000</td>
+              <td><span class="source-manual">Manual</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;color:var(--text);">Project Manager</td>
+              <td class="col-value">180 hrs</td>
+              <td class="col-value">$175/hr</td>
+              <td class="col-value">$31,500</td>
+              <td><span class="source-manual">Manual</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:500;color:var(--text);">QA Lead</td>
+              <td class="col-value">200 hrs</td>
+              <td class="col-value">$165/hr</td>
+              <td class="col-value">$33,000</td>
+              <td><span class="source-manual">Manual</span></td>
+            </tr>
+            <tr class="row-ai">
+              <td style="font-weight:500;color:var(--text);">Technical Writer</td>
+              <td class="col-value">160 hrs</td>
+              <td class="col-value">$125/hr</td>
+              <td class="col-value">$20,000</td>
+              <td><span class="source-ai">&#129302; AI Suggested</span></td>
+            </tr>
+            <tr class="row-ai">
+              <td style="font-weight:500;color:var(--text);">Change Management Consultant</td>
+              <td class="col-value">120 hrs</td>
+              <td class="col-value">$155/hr</td>
+              <td class="col-value">$18,600</td>
+              <td><span class="source-ai">&#129302; AI Suggested</span></td>
+            </tr>
+            <tr class="total-row">
+              <td style="font-weight:700;">Total</td>
+              <td class="col-value" style="font-weight:700;">1,220 hrs</td>
+              <td></td>
+              <td class="col-value" style="font-weight:700;color:var(--accent) !important;font-size:0.88rem;">$216,300</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">&#128161; 2 line items suggested by Claude Sonnet based on historical engagement patterns</p>
+    </div>
+  </div>
+</div>
+
+<footer class="app-footer">
+  Built with React &middot; Azure Functions &middot; Claude Sonnet &middot; Azure AI Foundry &middot; Certinia PSA
+</footer>
+
+<script>
+  const pageList = document.getElementById('page-list');
+  const pageDetail = document.getElementById('page-detail');
+  const backBtn = document.getElementById('back-btn');
+
+  function showPage(show, hide) {
+    hide.classList.add('fade-out');
+    setTimeout(function() {
+      hide.classList.remove('active', 'fade-out');
+      show.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 200);
+  }
+
+  document.querySelectorAll('.open-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      showPage(pageDetail, pageList);
+    });
+  });
+
+  backBtn.addEventListener('click', function() {
+    showPage(pageList, pageDetail);
+  });
+
+  /* Filter pill toggle (visual only) */
+  document.querySelectorAll('.filter-row').forEach(function(row) {
+    var pills = row.querySelectorAll('.pill');
+    pills.forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        pills.forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
